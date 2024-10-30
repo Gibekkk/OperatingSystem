@@ -7,7 +7,7 @@ data_output_path = 'Data/Output'
 data_input_path = 'Data/Input'
 debugPath = 'debugProcesses'
 originalPath = 'processes'
-debug = True
+debug = False
 
 def run(process):
     workBookName = process + 'Output'
@@ -29,13 +29,18 @@ def run(process):
             results = sjfPree(processes)
         case 'ljfPree':
             results = ljfPree(processes)
+        case 'roundRobin':
+            results = roundRobin(processes, 12)
             
     if results is not None:
         prints(results, Worksheet)
         
     Workbook.close()
 
+print(f"{'Debugging Process Started:' if debug else 'Counting Process Started:'}")
 run('fcfs')
 run('sjfNonPree')
 run('sjfPree')
 run('ljfPree')
+run('roundRobin')
+print("Process Completed! Please Check The Outuput Folder!")

@@ -7,3 +7,4 @@ class Process:
         self.remaining_time = burst_time
         self.complete_time = 0
         self.turn_around_time = 0
+        self.start_time = arrival_time

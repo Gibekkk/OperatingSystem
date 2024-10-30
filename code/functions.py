@@ -218,3 +218,68 @@ def sjfNonPree(processes):
             q.turn_around_time += 1
         time += 1
     return processes
+
+def roundRobin(processes, quantum_time):
+    counter = quantum_time
+    time = 0
+    queue = []
+    running = None
+    finishedJob = 0
+    
+    while finishedJob < len(processes):    
+        if counter == 0:
+            if running is not None:
+                running.start_time = time
+                queue.append(running)
+                running = None
+            counter = quantum_time
+            
+        for process in processes:
+            if process.arrival_time == time:
+                if running is not None:
+                    queue.append(process)
+                else:
+                    running = process
+                
+        if running is not None:
+            if len(queue) > 0:
+                lowest = running
+                for q in queue:
+                    if q.start_time < lowest.start_time and q.remaining_time > 0:
+                        lowest = q
+                if lowest is not running:
+                    queue.remove(lowest)
+                    queue.append(running)
+                    running = lowest
+        else:
+            if len(queue) > 0:
+                lowest = None
+                for q in queue:
+                    if lowest is None:
+                        if q.remaining_time > 0:
+                            lowest = q
+                    else:
+                        if q.start_time < lowest.start_time and q.remaining_time > 0:
+                            lowest = q
+                if lowest is not None:
+                    queue.remove(lowest)
+                    running = lowest
+
+        if running is not None:
+            running.remaining_time -= 1
+            running.turn_around_time += 1
+            if running.remaining_time == 0:
+                finishedJob += 1
+                running.complete_time = time
+                running = None
+                counter = quantum_time + 1
+        
+        counter -= 1
+        
+        for q in queue:
+            if q.remaining_time > 0:
+                q.waiting_time += 1
+                q.turn_around_time += 1
+        
+        time += 1
+    return processes
