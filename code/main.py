@@ -9,7 +9,7 @@ debugPath = 'debugProcesses'
 originalPath = 'processes'
 debug = False
 
-def run(process):
+def run(process, quantum_time = 12):
     workBookName = process + 'Output'
     processes = []
     data = pd.read_excel(f'{data_input_path}/{debugPath if debug else originalPath}.xlsx')
@@ -30,7 +30,7 @@ def run(process):
         case 'ljfPree':
             results = ljfPree(processes)
         case 'roundRobin':
-            results = roundRobin(processes, 12)
+            results = roundRobin(processes, quantum_time)
             
     if results is not None:
         prints(results, Worksheet)
@@ -42,5 +42,5 @@ run('fcfs')
 run('sjfNonPree')
 run('sjfPree')
 run('ljfPree')
-run('roundRobin')
+run('roundRobin', 12)
 print(f"Process Completed! Please Check The Outuput Folder In {data_output_path} Path!")
