@@ -9,7 +9,7 @@ debugPath = 'debugProcesses'
 originalPath = 'processes'
 debug = False
 
-def run(process, quantum_time = 12):
+def run(process, quantum_time = None):
     workBookName = process + 'Output'
     processes = []
     data = pd.read_excel(f'{data_input_path}/{debugPath if debug else originalPath}.xlsx')
@@ -18,6 +18,7 @@ def run(process, quantum_time = 12):
         
     Workbook = xlsx.Workbook(f'{data_output_path}/{workBookName}.xlsx')
     Worksheet = Workbook.add_worksheet()
+    Worksheet2 = Workbook.add_worksheet()
     
     results = None
     match process:
@@ -34,6 +35,7 @@ def run(process, quantum_time = 12):
             
     if results is not None:
         prints(results, Worksheet)
+        detailsPrint(results, Worksheet2, quantum_time)
         
     Workbook.close()
 

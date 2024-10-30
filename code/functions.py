@@ -17,6 +17,31 @@ def prints(processes, worksheet):
         worksheet.write(f'F{i}', f"{process.complete_time}")
         worksheet.write(f'G{i}', f"{process.turn_around_time}")
         
+def detailsPrint(processes, worksheet, quantum_time = None):
+    total_waiting_time = 0
+    total_turn_around_time = 0
+    for process in processes:
+        total_waiting_time += process.waiting_time
+        total_turn_around_time += process.turn_around_time
+    
+    AWT = total_waiting_time / len(processes)
+    ATAT = total_turn_around_time / len(processes)
+    worksheet.write(f'A1', "Total Process")
+    worksheet.write(f'A2', "AWT (Average Waiting Time)")
+    worksheet.write(f'A3', "Total Waiting Time")
+    worksheet.write(f'A4', "ATAT (Average Turn Around Time)")
+    worksheet.write(f'A5', "Total Turn Around Time")
+    
+    worksheet.write(f'B1', len(processes))
+    worksheet.write(f'B2', AWT)
+    worksheet.write(f'B3', total_waiting_time)
+    worksheet.write(f'B4', ATAT)
+    worksheet.write(f'B5', total_turn_around_time)
+    
+    if quantum_time is not None:
+        worksheet.write(f'A6', "Quantum Time")
+        worksheet.write(f'B6', quantum_time)
+        
 def display(processes):
     for process in processes:
         print(f"process: {process.PID}, arrival_time: {process.arrival_time}, burst_time: {process.burst_time}, remaining_time: {process.remaining_time}, waiting_time: {process.waiting_time}, complete_time: {process.complete_time}, turn_around_time: {process.turn_around_time}")
