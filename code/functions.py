@@ -252,10 +252,11 @@ def roundRobin(processes, quantum_time):
     finishedJob = 0
     
     while finishedJob < len(processes):    
+        nextInLine = None
         if counter == 0:
             if running is not None:
                 running.start_time = time
-                queue.append(running)
+                nextInLine = running
                 running = None
             counter = quantum_time
             
@@ -289,6 +290,9 @@ def roundRobin(processes, quantum_time):
                 if lowest is not None:
                     queue.remove(lowest)
                     running = lowest
+                    
+        if nextInLine is not None:
+            queue.append(nextInLine)
 
         if running is not None:
             running.remaining_time -= 1
